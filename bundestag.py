@@ -22,6 +22,8 @@ filter_url_base = 'https://pdok.bundestag.de/treffer.php?h={}&q=19%2F%2A&gtyp={}
 gtyps = ['Gesetze', 'Verordnungen']
 RESULTS_PER_PAGE = 10
 
+create_folder_if_not_existing(OUTPUT_DIR)
+
 for gtyp in gtyps:
     h = 0
     while True:
