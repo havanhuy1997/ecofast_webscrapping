@@ -18,6 +18,12 @@ def get_soup_of_with_h_and_gtyp(h, gtyp):
     url = filter_url_base.format(h, gtyp)
     return get_soup(url)
 
+def get_date_for_title(date_str):
+    date_split = date_str.split('.')
+    if len(date_split) > 2:
+        return date_split[2][-2:] + date_split[1] + date_split[0]
+    return date_str
+
 filter_url_base = 'https://pdok.bundestag.de/treffer.php?h={}&q=19%2F%2A&gtyp={}'
 gtyps = ['Gesetze', 'Verordnungen']
 RESULTS_PER_PAGE = 10
@@ -36,10 +42,11 @@ for gtyp in gtyps:
             title = a_tag.text
             full_content = tr.select_one('.fullCont').text
             date = tr.select('.resultText strong')[1].text
+            date_for_title = get_date_for_title(date)
 
-            output_dir = OUTPUT_DIR + '{}_DE_BUNDESTAG'.format(date)
+            output_dir = OUTPUT_DIR + '{}_DE_BUNDESTAG'.format(date_for_title)
             create_folder_if_not_existing(output_dir)
-            file_name = '{}_DE_BUNDESTAG_{}'.format(date, re.sub('\W', '', title))
+            file_name = '{}_DE_BUNDESTAG_{}.txt'.format(date_for_title, re.sub('[^0-9a-zA-Z]', '', title))
             with open(output_dir + '/' + file_name, 'w') as f:
                 print('+ Saving {}'.format(title))
                 f.write(date + '\n')
