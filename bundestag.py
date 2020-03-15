@@ -1,12 +1,7 @@
-import requests
-from bs4 import BeautifulSoup
-from file import create_folder_if_not_existing, get_pdf_from_link
+from file import create_folder_if_not_existing, get_pdf_from_link, save_txt_file
 from config import OUTPUT_DIR
 import re
-
-def get_soup(url):
-    r = requests.get(url)
-    return BeautifulSoup(r.content, features='lxml')
+from utils import get_soup
 
 def exist_next_page(soup):
     navigation_a_tags = soup.select('#bottomPageNav .sucheWeiter a')
@@ -47,15 +42,7 @@ for gtyp in gtyps:
             output_dir = OUTPUT_DIR + '{}_DE_BUNDESTAG'.format(date_for_title)
             create_folder_if_not_existing(output_dir)
             file_name = '{}_DE_BUNDESTAG_{}.txt'.format(date_for_title, re.sub('[^0-9a-zA-Z]', '', title))
-            with open(output_dir + '/' + file_name, 'w', encoding="utf-8") as f:
-                print('+ Saving {}'.format(title))
-                f.write(date + '\n')
-                f.write(title + '\n')
-                f.write(href + '\n')
-                if type(pdf_doc) == str:
-                    f.write(pdf_doc)
-                else:
-                    f.writelines(pdf_doc)
+            save_txt_file(output_dir + '/' + file_name, date, title, href, pdf_doc)
         if exist_next_page(soup):
             h += RESULTS_PER_PAGE
         else:
