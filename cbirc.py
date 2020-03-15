@@ -42,7 +42,7 @@ def save_rows(rows):
         link = DETAIL_URL_FORMAT.format(doc_id, data_item_id)
         j = get_json(GET_DOC_URL_FORMAT.format(doc_id))
         save_txt_file(
-            '{}_CN_CBIRC'.format(date_for_title),
+            'CN/{}_CN_CBIRC'.format(date_for_title),
             publishDate,
             title,
             link,

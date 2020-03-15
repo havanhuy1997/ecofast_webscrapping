@@ -1,5 +1,4 @@
 from file import create_folder_if_not_existing, get_pdf_from_link, save_txt_file
-from config import OUTPUT_DIR
 import re
 from utils import get_soup
 
@@ -23,8 +22,6 @@ filter_url_base = 'https://pdok.bundestag.de/treffer.php?h={}&q=19%2F%2A&gtyp={}
 gtyps = ['Gesetze', 'Verordnungen']
 RESULTS_PER_PAGE = 10
 
-create_folder_if_not_existing(OUTPUT_DIR)
-
 for gtyp in gtyps:
     h = 0
     while True:
@@ -39,10 +36,13 @@ for gtyp in gtyps:
             date = tr.select('.resultText strong')[1].text
             date_for_title = get_date_for_title(date)
 
-            output_dir = OUTPUT_DIR + '{}_DE_BUNDESTAG'.format(date_for_title)
-            create_folder_if_not_existing(output_dir)
-            file_name = '{}_DE_BUNDESTAG_{}.txt'.format(date_for_title, re.sub('[^0-9a-zA-Z]', '', title))
-            save_txt_file(output_dir + '/' + file_name, date, title, href, pdf_doc)
+            save_txt_file(
+                'DE/{}_DE_BUNDESTAG'.format(date_for_title),
+                date, 
+                title, 
+                href, 
+                pdf_doc
+            )
         if exist_next_page(soup):
             h += RESULTS_PER_PAGE
         else:

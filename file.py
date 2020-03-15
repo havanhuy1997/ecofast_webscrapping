@@ -8,7 +8,7 @@ import re
 
 def create_folder_if_not_existing(folder_path):
     if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
 
 create_folder_if_not_existing(OUTPUT_DIR)
 
@@ -39,7 +39,7 @@ def save_txt_file(folder_name, date, title, href, content, remove_non_latin_from
         title_file_name = re.sub('[^0-9a-zA-Z]', '', title)
     else:
         title_file_name = title
-    file_name = folder_name + '_{}.txt'.format(title_file_name)
+    file_name = '{}_{}.txt'.format(folder_name.split('/')[-1], title_file_name)
     with open(output_dir + '/' + file_name, 'w', encoding="utf-8") as f:
         print('+ Saving {}-{}'.format(title, date))
         f.write(date + '\n')
